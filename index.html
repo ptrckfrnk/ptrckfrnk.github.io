@@ -1,1 +1,505 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Patrick Franke — Robotics & ML</title>
+<meta name="description" content="Patrick Franke — Machine Learning. Projects, research, and writing." />
+
+<!-- Open Graph / social preview (edit url + image once live) -->
+<meta property="og:title" content="Patrick Franke — Robotics & ML" />
+<meta property="og:description" content="Projects, research, and writing." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ptrckfrnk.github.io" />
+
+<!-- Inline SVG favicon: a claret 'pf' mark -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23faf6ef'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%239a2f2f'%3Epf%3C/text%3E%3C/svg%3E" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --paper:      #faf6ef;
+    --paper-2:    #f3ede1;
+    --ink:        #1c1a17;
+    --ink-soft:   #534e46;
+    --ink-faint:  #8b8478;
+    --line:       #ddd5c6;
+    --accent:     #9a2f2f;   /* deep claret */
+    --accent-dim: #b9605f;
+    --max:        1100px;
+
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans:  "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    /* subtle paper grain */
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(154,47,47,0.05), transparent 38%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- top bar ---------- */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 16px 32px; max-width: var(--max); margin: 0 auto;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-weight: 600; font-size: 1.15rem; letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .brand .dot { color: var(--accent); }
+  .nav-links { display: flex; gap: 26px; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.74rem; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink-soft); text-decoration: none;
+    position: relative; padding-bottom: 2px;
+  }
+  .nav-links a::after {
+    content: ""; position: absolute; left: 0; bottom: -2px;
+    width: 0; height: 1.5px; background: var(--accent);
+    transition: width 0.28s ease;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { width: 100%; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ---------- reveal animation ---------- */
+  .reveal { opacity: 0; transform: translateY(16px); }
+  .in-view {
+    animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 92px 0 64px; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 230px; gap: 56px; align-items: start;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 18px;
+  }
+  h1.name {
+    font-family: var(--serif);
+    font-weight: 600; font-size: clamp(2.8rem, 7vw, 4.7rem);
+    line-height: 0.98; letter-spacing: -0.025em; margin: 0 0 22px;
+  }
+  .lede {
+    font-size: 1.18rem; color: var(--ink-soft); max-width: 33ch; margin: 0 0 28px;
+  }
+  .lede em { font-family: var(--serif); font-style: italic; color: var(--ink); }
+
+  .socials { display: flex; flex-wrap: wrap; gap: 12px; }
+  .socials a {
+    font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
+    text-decoration: none; color: var(--ink-soft);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 15px; background: var(--paper);
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .socials a:hover {
+    color: var(--accent); border-color: var(--accent-dim);
+    transform: translateY(-2px);
+  }
+
+  .portrait {
+    aspect-ratio: 4 / 5; width: 100%;
+    border-radius: 4px; overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+      repeating-linear-gradient(135deg, var(--paper-2) 0 10px, #ece4d5 10px 20px);
+    display: grid; place-items: center; text-align: center;
+    color: var(--ink-faint); font-family: var(--mono); font-size: 0.7rem;
+    box-shadow: 0 14px 40px -22px rgba(28,26,23,0.5);
+  }
+  .portrait span { padding: 0 14px; line-height: 1.5; }
+  @media (max-width: 720px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .portrait { width: 180px; }
+  }
+
+  /* ---------- section scaffolding ---------- */
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 42px;
+  }
+  .sec-num {
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .sec-title {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(1.7rem, 3.5vw, 2.3rem); letter-spacing: -0.02em; margin: 0;
+  }
+  .sec-rule { flex: 1; height: 1px; background: var(--line); align-self: center; }
+
+  /* ---------- about ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; }
+  .about-grid p { margin: 0 0 18px; }
+  .about-grid p:first-child { margin-top: 0; }
+  .focus-label {
+    font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--ink-faint); margin: 0 0 14px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    font-size: 0.84rem; color: var(--ink-soft);
+    background: var(--paper-2); border: 1px solid var(--line);
+    padding: 5px 12px; border-radius: 4px;
+  }
+  @media (max-width: 720px) { .about-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ---------- projects ---------- */
+  .project {
+    display: grid; grid-template-columns: 150px 1fr; gap: 30px;
+    padding: 30px 0; border-top: 1px solid var(--line);
+    transition: transform 0.25s ease;
+  }
+  .project:first-of-type { border-top: none; }
+  .project:hover { transform: translateX(4px); }
+  .thumb {
+    aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, var(--paper-2), #e8dfce);
+    display: grid; place-items: center;
+    color: var(--ink-faint); font-family: var(--mono); font-size: 0.62rem;
+    position: relative;
+  }
+  .thumb::after {
+    content: attr(data-tag);
+    position: absolute; inset: auto 0 8px 0; text-align: center;
+  }
+  .p-index {
+    font-family: var(--mono); font-size: 0.74rem; color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .p-title {
+    font-family: var(--serif); font-weight: 600; font-size: 1.45rem;
+    letter-spacing: -0.01em; margin: 0 0 4px; line-height: 1.15;
+  }
+  .p-title a { text-decoration: none; }
+  .p-desc { color: var(--ink-soft); margin: 8px 0 16px; max-width: 62ch; }
+  .p-tech {
+    display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px;
+  }
+  .p-tech span {
+    font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint);
+    border: 1px solid var(--line); border-radius: 3px; padding: 2px 8px;
+  }
+  .p-links { display: flex; flex-wrap: wrap; gap: 18px; }
+  .p-links a {
+    font-family: var(--mono); font-size: 0.76rem; text-decoration: none;
+    color: var(--ink); border-bottom: 1.5px solid var(--accent);
+    padding-bottom: 1px; transition: color 0.2s ease, gap 0.2s ease;
+  }
+  .p-links a:hover { color: var(--accent); }
+  .p-links a .arrow { transition: margin 0.2s ease; display: inline-block; }
+  .p-links a:hover .arrow { margin-left: 3px; }
+  @media (max-width: 620px) {
+    .project { grid-template-columns: 1fr; gap: 16px; }
+    .thumb { max-width: 220px; }
+  }
+
+  /* ---------- writing (optional / placeholder) ---------- */
+  .writing-item {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 24px; padding: 16px 0; border-top: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .writing-item:hover .w-title { color: var(--accent); }
+  .w-title { font-size: 1.05rem; transition: color 0.2s ease; }
+  .w-date {
+    font-family: var(--mono); font-size: 0.74rem; color: var(--ink-faint);
+    white-space: nowrap;
+  }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 48px 0 60px; margin-top: 20px;
+  }
+  .foot-grid {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .foot-big {
+    font-family: var(--serif); font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 500; letter-spacing: -0.01em; margin: 0;
+  }
+  .foot-big a { color: var(--accent); text-decoration: none;
+    border-bottom: 2px solid transparent; transition: border-color 0.2s ease; }
+  .foot-big a:hover { border-color: var(--accent-dim); }
+  .foot-meta {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--ink-faint);
+    text-align: right; line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">Patrick&nbsp;Franke</a>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" style="border-top:none;">
+    <div class="hero-grid">
+      <div class="reveal" style="animation-delay:0.05s">
+        <p class="eyebrow">Physical AI · Robotics · TU&nbsp;München</p>
+        <h1 class="name">Patrick<br>Franke</h1>
+        <p class="lede">
+          Machine-learning student at TUM working on the learning foundations
+          of <em>physical AI</em> — humanoid robotics, vision-language-action
+          models, and world models. Member of RoboTUM.
+        </p>
+        <div class="socials">
+          <!-- FILL ME: update handles/links. Remove any you don't use. -->
+          <a href="https://github.com/ptrckfrnk" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/patrick-franke/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="mailto:patrick.franke@tum.de">Email ↗</a>
+          <!-- TODO: re-enable when you have them
+          <a href="https://scholar.google.com/citations?user=ID" target="_blank" rel="noopener">Scholar ↗</a>
+          <a href="assets/cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+          -->
+        </div>
+      </div>
+
+      <div class="portrait reveal" style="animation-delay:0.18s">
+        <img src="assets/portrait.jpg" alt="Patrick Franke"
+             style="width:100%;height:100%;object-fit:cover" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">About</h2>
+      <span class="sec-rule"></span>
+    </div>
+    <div class="about-grid reveal" style="animation-delay:0.08s">
+      <div>
+        <!-- Drawn from your LinkedIn — edit freely to sound like you. -->
+        <p>
+          I'm a machine-learning student at the Technical University of Munich,
+          focused on the learning foundations behind physical AI: humanoid
+          robotics, vision-language-action models, and world models. I'm a
+          robotics engineer with RoboTUM and help run partnerships at the
+          European Student Robotics Association (ESRA).
+        </p>
+        <p>
+          I like work that spans the full arc — from the research idea to a
+          system that actually runs on hardware. Past projects have ranged from
+          on-board ML for a CubeSat to a wearable sleep-position classifier.
+        </p>
+        <p>
+          I'm always glad to talk about robotics, physical AI, and ML research.
+          The fastest way to reach me is
+          <a href="mailto:patrick.franke@tum.de" style="color:var(--accent)">email</a>.
+        </p>
+      </div>
+      <div>
+        <p class="focus-label">Focus areas</p>
+        <div class="chips">
+          <span>Physical AI</span>
+          <span>Humanoid Robotics</span>
+          <span>Vision-Language-Action</span>
+          <span>World Models</span>
+          <span>Deep Learning</span>
+          <span>Computer Vision</span>
+        </div>
+        <p class="focus-label" style="margin-top:26px">Toolbox</p>
+        <div class="chips">
+          <!-- adjust to match what you actually use -->
+          <span>Python</span>
+          <span>PyTorch</span>
+          <span>ROS</span>
+          <span>C++</span>
+        </div>
+        <p class="focus-label" style="margin-top:26px">Languages</p>
+        <div class="chips">
+          <span>German</span>
+          <span>English</span>
+          <span>Spanish</span>
+          <span>French</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section id="projects">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">Selected Projects</h2>
+      <span class="sec-rule"></span>
+    </div>
+
+    <!-- ---------- PROJECT TEMPLATE: copy this whole block per project ---------- -->
+    <article class="project reveal">
+      <div class="thumb" data-tag="add screenshot">assets/projects/video-to-3d.png</div>
+      <div>
+        <p class="p-index">P/01</p>
+        <h3 class="p-title"><a href="https://github.com/ptrckfrnk/humanoid-video-to-3D" target="_blank" rel="noopener">Humanoid Video-to-3D</a></h3>
+        <p class="p-desc">
+          A feed-forward pipeline that turns short indoor phone videos into
+          geometrically coherent 3D scenes with open-vocabulary semantic labels —
+          no COLMAP or per-scene optimization. Built for a humanoid perception
+          &amp; spatial-AI challenge, it supports natural-language 3D queries in
+          milliseconds.
+        </p>
+        <div class="p-tech">
+          <span>PyTorch</span><span>VGGT</span><span>SAM 2.1</span><span>OpenCLIP</span><span>Open3D</span><span>Rerun</span>
+        </div>
+        <div class="p-links">
+          <a href="https://github.com/ptrckfrnk/humanoid-video-to-3D" target="_blank" rel="noopener">Code <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project reveal">
+      <div class="thumb" data-tag="add screenshot">assets/projects/g1.png</div>
+      <div>
+        <p class="p-index">P/02</p>
+        <h3 class="p-title">Unitree G1 Humanoid — RoboTUM</h3>
+        <p class="p-desc">
+          Team work at RoboTUM on the Unitree G1 humanoid robot, where I led the
+          voice pipeline and motion planning — connecting spoken commands to
+          planned, executable motion on the robot. Developed collaboratively with
+          the team.
+        </p>
+        <div class="p-tech">
+          <span>Humanoid Robotics</span><span>Motion Planning</span><span>Voice Pipeline</span><span>Python</span><span>ROS</span>
+        </div>
+        <div class="p-links">
+          <span style="font-family:var(--mono);font-size:0.76rem;color:var(--ink-faint)">Private repository — may open up later</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project reveal">
+      <div class="thumb" data-tag="add screenshot">assets/projects/sleep.png</div>
+      <div>
+        <p class="p-index">P/03</p>
+        <h3 class="p-title"><a href="https://github.com/ptrckfrnk/sleep-position-classification" target="_blank" rel="noopener">Wearable Sleep-Position Classifier</a></h3>
+        <p class="p-desc">
+          A non-invasive wearable that classifies sleep position from two
+          accelerometers using machine learning — 100% accuracy across the four
+          main position groups (supine, prone, left, right). End-to-end hardware:
+          PSoC microcontroller, I²C sensors, and Bluetooth streaming.
+        </p>
+        <div class="p-tech">
+          <span>Python</span><span>Random Forest</span><span>Accelerometers</span><span>Embedded</span><span>Bluetooth</span>
+        </div>
+        <div class="p-links">
+          <a href="https://github.com/ptrckfrnk/sleep-position-classification" target="_blank" rel="noopener">Code <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </article>
+    <!-- ---------- end project blocks ---------- -->
+  </section>
+
+  <!-- ===================== WRITING (re-enable later) =====================
+       Hidden for now — uncomment when you have posts/papers to list.
+       Also re-add <a href="#writing">Writing</a> to the top nav.
+  <section id="writing">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Writing</h2>
+      <span class="sec-rule"></span>
+    </div>
+    <div class="reveal" style="animation-delay:0.08s">
+      <a class="writing-item" href="#">
+        <span class="w-title">Title of a post, paper, or note you want to surface</span>
+        <span class="w-date">2026</span>
+      </a>
+      <a class="writing-item" href="#">
+        <span class="w-title">Another entry — talks and blog posts work here too</span>
+        <span class="w-date">2025</span>
+      </a>
+    </div>
+  </section>
+  ====================================================================== -->
+
+</main>
+
+<!-- ===================== FOOTER / CONTACT ===================== -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <p class="foot-big">
+        Let's talk —<br>
+        <a href="mailto:patrick.franke@tum.de">patrick.franke@tum.de</a>
+      </p>
+      <div class="foot-meta">
+        © <span id="year"></span> Patrick Franke<br>
+        Munich, Germany<br>
+        Built by hand · hosted on GitHub Pages
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // current year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // scroll-triggered reveals (respects reduced-motion via CSS)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add("in-view");
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
