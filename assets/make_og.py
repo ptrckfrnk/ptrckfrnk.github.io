@@ -25,32 +25,25 @@ gd.ellipse([W - 520, -360, W + 360, 520], fill=(154, 47, 47, 34))
 glow = glow.filter(ImageFilter.GaussianBlur(180))
 img.paste(Image.new("RGB", (W, H), CLARET), (0, 0), glow)
 
-# --- thin frame ---
-draw.rounded_rectangle([24, 24, W - 24, H - 24], radius=12, outline=LINE, width=2)
-
-# --- pf mark ---
-mx, my, ms = 96, 96, 118
-draw.rounded_rectangle([mx, my, mx + ms, my + ms], radius=26, fill=PAPER2, outline=LINE, width=2)
-pf_font = ImageFont.truetype(GEO_B, 62)
-draw.text((mx + ms / 2, my + ms / 2), "pf", font=pf_font, fill=CLARET, anchor="mm")
-
-# --- name (auto-fit to frame width) ---
+# --- name (auto-fit), vertically centred with the tagline ---
 name = "Patrick Franke"
-max_w = (W - 24) - 96 - 30   # right frame inset minus left margin
-size = 132
+max_w = W - 96 - 96   # equal left/right margins
+size = 134
 while size > 60:
     f = ImageFont.truetype(GEO_B, size)
     if draw.textlength(name, font=f) <= max_w:
         break
     size -= 2
 name_font = ImageFont.truetype(GEO_B, size)
-name_top = 326
-draw.text((92, name_top), name, font=name_font, fill=INK, anchor="la")
 
-# --- tagline (two keywords only) ---
 tag_font = ImageFont.truetype(SANS, 33)
-draw.text((98, name_top + size + 8), "Humanoid robotics · Machine learning",
-          font=tag_font, fill=INK_SOFT, anchor="la")
+tagline = "Humanoid robotics · Physical AI · Machine learning"
+
+gap = 14
+block_h = size + gap + 33
+name_top = (H - block_h) // 2
+draw.text((96, name_top), name, font=name_font, fill=INK, anchor="la")
+draw.text((100, name_top + size + gap), tagline, font=tag_font, fill=INK_SOFT, anchor="la")
 
 img.save("og-image.png")
 print("wrote og-image.png", img.size)
