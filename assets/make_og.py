@@ -29,20 +29,10 @@ img.paste(Image.new("RGB", (W, H), CLARET), (0, 0), glow)
 draw.rounded_rectangle([24, 24, W - 24, H - 24], radius=12, outline=LINE, width=2)
 
 # --- pf mark ---
-mx, my, ms = 96, 74, 118
+mx, my, ms = 96, 96, 118
 draw.rounded_rectangle([mx, my, mx + ms, my + ms], radius=26, fill=PAPER2, outline=LINE, width=2)
 pf_font = ImageFont.truetype(GEO_B, 62)
 draw.text((mx + ms / 2, my + ms / 2), "pf", font=pf_font, fill=CLARET, anchor="mm")
-
-def spaced(draw, xy, text, font, fill, spacing):
-    x, y = xy
-    for ch in text:
-        draw.text((x, y), ch, font=font, fill=fill, anchor="la")
-        x += draw.textlength(ch, font=font) + spacing
-
-# --- eyebrow ---
-eye_font = ImageFont.truetype(MONO, 23)
-spaced(draw, (98, 300), "PHYSICAL AI · ROBOTICS · TU MÜNCHEN", eye_font, CLARET, 5)
 
 # --- name (auto-fit to frame width) ---
 name = "Patrick Franke"
@@ -54,16 +44,13 @@ while size > 60:
         break
     size -= 2
 name_font = ImageFont.truetype(GEO_B, size)
-draw.text((92, 342), name, font=name_font, fill=INK, anchor="la")
+name_top = 326
+draw.text((92, name_top), name, font=name_font, fill=INK, anchor="la")
 
-# --- tagline ---
-tag_font = ImageFont.truetype(SANS, 31)
-draw.text((98, 498), "Humanoid robotics · vision-language-action · world models",
+# --- tagline (two keywords only) ---
+tag_font = ImageFont.truetype(SANS, 33)
+draw.text((98, name_top + size + 8), "Humanoid robotics · Machine learning",
           font=tag_font, fill=INK_SOFT, anchor="la")
-
-# --- url ---
-url_font = ImageFont.truetype(MONO, 22)
-draw.text((98, 556), "ptrckfrnk.github.io", font=url_font, fill=INK_FNT, anchor="la")
 
 img.save("og-image.png")
 print("wrote og-image.png", img.size)
