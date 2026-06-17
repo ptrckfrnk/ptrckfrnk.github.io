@@ -26,7 +26,7 @@ glow = glow.filter(ImageFilter.GaussianBlur(180))
 img.paste(Image.new("RGB", (W, H), CLARET), (0, 0), glow)
 
 # --- name (auto-fit), vertically centred with the tagline ---
-name = "Patrick Franke"
+name = "Patrick Franke Oviedo"
 max_w = W - 96 - 96   # equal left/right margins
 size = 134
 while size > 60:
@@ -41,7 +41,9 @@ tagline = "Humanoid robotics · Physical AI · Machine learning"
 
 gap = 14
 block_h = size + gap + 33
-name_top = (H - block_h) // 2
+# Centre the text block on the lower rule-of-thirds line (2/3 down) rather
+# than the middle, for a more dynamic composition.
+name_top = (2 * H) // 3 - block_h // 2
 draw.text((96, name_top), name, font=name_font, fill=INK, anchor="la")
 draw.text((100, name_top + size + gap), tagline, font=tag_font, fill=INK_SOFT, anchor="la")
 
