@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ptrckfrnk.github.io/</loc>
-    <lastmod>2026-06-17</lastmod>
-  </url>
-</urlset>
+<!--
+  This is a sitemap INDEX (not a plain urlset): it aggregates this site's
+  own sitemap plus each project subpage's own sitemap, so search engines
+  can discover everything from this one entry point.
+
+  To add a new project subpage (e.g. https://ptrckfrnk.github.io/some-project/),
+  give it its own sitemap.xml, then add an entry here following the same
+  pattern as the ones below:
+
+    <sitemap>
+      <loc>https://ptrckfrnk.github.io/some-project/sitemap.xml</loc>
+    </sitemap>
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://ptrckfrnk.github.io/sitemap-root.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>https://ptrckfrnk.github.io/where-am-i/sitemap.xml</loc>
+  </sitemap>
+</sitemapindex>
